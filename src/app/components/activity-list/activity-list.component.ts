@@ -52,27 +52,20 @@ export class ActivityListComponent implements OnInit {
     this.error = null;
 
     try {
-      console.log('Starting loadActivities...');
-      
       const location = await firstValueFrom(this.plannerService.getLocation());
-      console.log('Location:', location);
       
       const returnTime = await firstValueFrom(this.plannerService.getReturnTime());
-      console.log('Return time:', returnTime);
 
       if (!location || !returnTime) {
         this.error = 'Bitte wähle zuerst einen Standort und eine Rückkehrzeit.';
-        console.log('Missing location or return time');
         this.loading = false;
         return;
       }
 
-      console.log('Calling API with:', { location, returnTime });
       const response = await firstValueFrom(this.apiService.getPlan(location, returnTime));
-      console.log('API Response:', response);
       
       this.activities = response || [];
-      console.log('Activities set:', this.activities);
+      this.activities.sort((a, b) => b.duration_at_track - a.duration_at_track);
     } catch (err) {
       console.error('Detailed error:', err);
       this.error = 'Fehler beim Laden der Aktivitäten. Bitte versuche es später erneut.';

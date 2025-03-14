@@ -6,11 +6,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { PlannerService } from '../../services/planner.service';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-time-selector',
@@ -25,61 +26,96 @@ import { PlannerService } from '../../services/planner.service';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
+    MatButtonModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatButtonModule,
+    MatCardModule,
     RouterModule
   ]
 })
 export class TimeSelectorComponent {
-  returnType: 'today' | 'other' = 'today';
+  dateType: 'today' | 'other' = 'today';
+  hours: string[] = [];
+  minutes: string[] = ['00', '15', '30', '45'];
+  selectedHour = '';
+  selectedMinute = '00';
   selectedDate: Date | null = null;
-  hours: string = '17';
-  minutes: string = '00';
   hasReturnTime = false;
-
-  hoursOptions = Array.from({length: 24}, (_, i) => i.toString().padStart(2, '0'));
-  minutesOptions = ['00', '15', '30', '45'];
+  errorMessage = '';
+  minDate = new Date();
+  maxDate = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
 
   constructor(private plannerService: PlannerService) {
-    this.updateReturnTime();
     this.plannerService.getReturnTime().subscribe(time => {
       this.hasReturnTime = !!time;
     });
+    this.updateAvailableHours();
   }
 
-  handleReturnTypeChange(type: 'today' | 'other') {
-    this.returnType = type;
-    if (type === 'other' && !this.selectedDate) {
+  private updateAvailableHours() {
+    const now = new Date();
+    const minTime = new Date(now.getTime() + 6 * 60 * 60 * 1000);
+    
+    if (this.dateType === 'today') {
+      const minHour = minTime.getHours();
+      
+      if (minTime.getDate() > now.getDate()) {
+        this.errorMessage = 'Heute können keine weiteren Wanderungen mehr geplant werden.';
+        this.hours = [];
+        return;
+      }
+
+      this.hours = Array.from({ length: 24 - minHour }, (_, i) => {
+        const hour = minHour + i;
+        return hour.toString().padStart(2, '0');
+      });
+    } else {
+      // Für andere Tage alle Stunden verfügbar
+      this.hours = Array.from({ length: 24 }, (_, i) => {
+        return i.toString().padStart(2, '0');
+      });
+    }
+
+    if (this.hours.length > 0) {
+      this.selectedHour = this.hours[0];
+      this.errorMessage = '';
+    }
+  }
+
+  onDateTypeChange() {
+    if (this.dateType === 'today') {
+      this.selectedDate = null;
+    } else {
       this.selectedDate = new Date();
     }
-    this.updateReturnTime();
+    this.updateAvailableHours();
+    this.onTimeChange();
   }
 
-  handleDateChange() {
-    this.updateReturnTime();
+  onDateChange() {
+    this.updateAvailableHours();
+    this.onTimeChange();
   }
 
-  handleTimeChange() {
-    this.updateReturnTime();
-  }
+  onTimeChange() {
+    if (!this.selectedHour || !this.selectedMinute) return;
 
-  private updateReturnTime() {
-    const time = `${this.hours}:${this.minutes}`;
-    if (this.returnType === 'today') {
-      this.plannerService.setReturnTime(time);
-    } else if (this.selectedDate) {
-      const date = this.selectedDate.toLocaleDateString('de-DE');
-      this.plannerService.setReturnTime(`${date} ${time}`);
+    const now = new Date();
+    const selectedDateTime = this.dateType === 'today' ? now : (this.selectedDate || now);
+    selectedDateTime.setHours(parseInt(this.selectedHour, 10));
+    selectedDateTime.setMinutes(parseInt(this.selectedMinute, 10));
+    selectedDateTime.setSeconds(0);
+    selectedDateTime.setMilliseconds(0);
+
+    const minTime = new Date((new Date()).getTime() + 6 * 60 * 60 * 1000);
+
+    if (selectedDateTime.getTime() >= minTime.getTime()) {
+      const timeString = `${selectedDateTime.toISOString().split('T')[0]} ${this.selectedHour}:${this.selectedMinute}`;
+      this.plannerService.setReturnTime(timeString);
+      this.errorMessage = '';
+    } else {
+      this.errorMessage = 'Bitte wähle eine Zeit mindestens 6 Stunden in der Zukunft.';
+      this.plannerService.setReturnTime(minTime.toISOString());
     }
-  }
-
-  getReturnTimeDisplay(): string {
-    if (this.returnType === 'today') {
-      return `Heute um ${this.hours}:${this.minutes} Uhr`;
-    } else if (this.selectedDate) {
-      return `Am ${this.selectedDate.toLocaleDateString('de-DE')} um ${this.hours}:${this.minutes} Uhr`;
-    }
-    return 'Nicht festgelegt';
   }
 }

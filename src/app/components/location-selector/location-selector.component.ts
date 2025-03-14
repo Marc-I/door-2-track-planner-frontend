@@ -42,15 +42,15 @@ export class LocationSelectorComponent {
     if (this.locationType === 'current') {
       this.getCurrentLocation();
     } else {
-      this.plannerService.setLocation({ lat: 47.2692124, lng: 11.4041024 }, '');
+      this.plannerService.setLocation({ lat: 47.123, lng: 8.456 }, '');
     }
   }
 
   onManualLocationSubmit() {
     if (this.manualLocation) {
-      // Verwende Innsbruck als Beispiel-Koordinaten
+      // Verwende folgende Koordinaten als Beispiel-Koordinaten
       this.plannerService.setLocation(
-        { lat: 47.2692124, lng: 11.4041024 },
+        { lat: 47.123, lng: 8.456 },
         this.manualLocation
       );
     }

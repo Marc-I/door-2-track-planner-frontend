@@ -3,34 +3,26 @@
   <p class="description">Übersicht deiner geplanten Aktivität und Route</p>
 
   <div class="details-grid">
-    <mat-card class="activity-card">
-      <mat-card-content>
-        <div class="card-header">
-          <mat-icon>hiking</mat-icon>
-          <h3>Aktivität</h3>
-        </div>
-        
-        <div class="activity-info">
-          <h4>{{activity?.track_name}}</h4>
-          
-          <div class="activity-stats">
-            <div class="stat">
-              <mat-icon>schedule</mat-icon>
-              <span>{{activity?.duration_at_track}} Min.</span>
-            </div>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
 
     <mat-card class="route-card">
       <mat-card-content>
         <div class="card-header">
           <mat-icon>route</mat-icon>
-          <h3>Route</h3>
+          <h3>Anreise</h3>
         </div>
 
         <div class="route-segments">
+          <div class="segment">
+            <div class="segment-icon">
+              <mat-icon>home</mat-icon>
+            </div>
+            <div class="segment-details">
+              <div class="segment-type">
+                <span>Start</span>
+              </div>
+              <div class="segment-distance">{{getFormattedTime(activity?.departure_time_home)}}</div>
+            </div>
+          </div>
           <div *ngFor="let segment of routeToActivity" class="segment">
             <div class="segment-icon" [class]="segment.type">
               <mat-icon>{{
@@ -47,12 +39,88 @@
               <div class="segment-time">{{segment.duration}} Min.</div>
             </div>
           </div>
+          <div class="segment">
+            <div class="segment-icon">
+            </div>
+            <div class="segment-details">
+              <div class="segment-type">
+                <span>Ankunft</span>
+              </div>
+              <div class="segment-distance">{{getFormattedTime(activity?.arrival_time_track_start)}}</div>
+            </div>
+          </div>
         </div>
 
-        <div class="total-time">
-          <span>Gesamtzeit:</span>
-          <span>{{getTotalDuration()}} Min.</span>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="activity-card">
+      <mat-card-content>
+        <div class="card-header">
+          <mat-icon>hiking</mat-icon>
+          <h3>Aktivität</h3>
         </div>
+        
+        <div class="activity-info">
+          <h4>{{activity?.track_name?.de}}</h4>
+          
+          <div class="activity-stats">
+            <div class="stat">
+              <mat-icon>schedule</mat-icon>
+              <span>{{activity?.duration_at_track | number:'1.0-0'}} Min.</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="route-card">
+      <mat-card-content>
+        <div class="card-header">
+          <mat-icon>route</mat-icon>
+          <h3>Rückreise</h3>
+        </div>
+
+        <div class="route-segments">
+          <div class="segment">
+            <div class="segment-icon">
+            </div>
+            <div class="segment-details">
+              <div class="segment-type">
+                <span>Start</span>
+              </div>
+              <div class="segment-distance">{{getFormattedTime(activity?.departure_time_track_end)}}</div>
+            </div>
+          </div>
+          <div *ngFor="let segment of routeToActivity" class="segment">
+            <div class="segment-icon" [class]="segment.type">
+              <mat-icon>{{
+                segment.type === 'walk' ? 'directions_walk' :
+                segment.type === 'bus' ? 'directions_bus' : 'train'
+              }}</mat-icon>
+            </div>
+            <div class="segment-details">
+              <div class="segment-type">
+                {{segment.type === 'walk' ? 'Zu Fuß' :
+                  segment.type === 'bus' ? 'Bus ' + segment.line :
+                  'U-Bahn ' + segment.line}}
+              </div>
+              <div class="segment-time">{{segment.duration}} Min.</div>
+            </div>
+          </div>
+          <div class="segment">
+            <div class="segment-icon">
+              <mat-icon>home</mat-icon>
+            </div>
+            <div class="segment-details">
+              <div class="segment-type">
+                <span>Start</span>
+              </div>
+              <div class="segment-distance">{{getFormattedTime(activity?.arrival_time_home)}}</div>
+            </div>
+          </div>
+        </div>
+
       </mat-card-content>
     </mat-card>
   </div>

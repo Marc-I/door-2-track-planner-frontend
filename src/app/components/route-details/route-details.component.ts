@@ -48,6 +48,16 @@ export class RouteDetailsComponent implements OnInit {
     return this.routeToActivity.reduce((total, segment) => total + segment.duration, 0);
   }
 
+  getFormattedTime(time?: string): string {
+    if (!time) {
+      return '';
+    }
+    return new Date(time).toLocaleTimeString('de-DE', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
   resetPlanner() {
     this.plannerService.reset();
     this.router.navigate(['/']);
