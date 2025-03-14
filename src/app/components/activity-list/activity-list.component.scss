@@ -33,6 +33,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
+    margin-bottom: 2rem;
   }
 
   .activity-card {
@@ -146,6 +147,18 @@
           color: #991B1B;
         }
       }
+    }
+  }
+
+  .card-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding: 1rem;
+    border-top: 1px solid #E5E7EB;
+
+    button {
+      min-width: 120px;
     }
   }
 }

@@ -8,6 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatButtonModule } from '@angular/material/button';
+import { RouterModule } from '@angular/router';
 import { PlannerService } from '../../services/planner.service';
 
 @Component({
@@ -24,7 +26,9 @@ import { PlannerService } from '../../services/planner.service';
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatButtonModule,
+    RouterModule
   ]
 })
 export class TimeSelectorComponent {
@@ -32,12 +36,16 @@ export class TimeSelectorComponent {
   selectedDate: Date | null = null;
   hours: string = '17';
   minutes: string = '00';
+  hasReturnTime = false;
 
   hoursOptions = Array.from({length: 24}, (_, i) => i.toString().padStart(2, '0'));
   minutesOptions = ['00', '15', '30', '45'];
 
   constructor(private plannerService: PlannerService) {
     this.updateReturnTime();
+    this.plannerService.getReturnTime().subscribe(time => {
+      this.hasReturnTime = !!time;
+    });
   }
 
   handleReturnTypeChange(type: 'today' | 'other') {

@@ -74,6 +74,18 @@
     font-size: 1rem;
     font-weight: 500;
   }
+
+  .card-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding: 1rem;
+    border-top: 1px solid #E5E7EB;
+
+    button {
+      min-width: 120px;
+    }
+  }
 }
 
 ::ng-deep {

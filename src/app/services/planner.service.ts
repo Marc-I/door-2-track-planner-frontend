@@ -38,7 +38,6 @@ export class PlannerService {
 
   // Location
   setLocation(location: { lat: number; lng: number }, name: string) {
-    console.log('setLocation', location, name);
     this.state.next({
       ...this.state.value,
       currentLocation: location,
@@ -47,7 +46,6 @@ export class PlannerService {
   }
 
   getLocation(): Observable<{ lat: number; lng: number } | null> {
-    console.log('getLocation', this.state.value.currentLocation);
     return new Observable(subscriber => {
       subscriber.next(this.state.value.currentLocation);
       this.state.subscribe(state => subscriber.next(state.currentLocation));
@@ -55,7 +53,6 @@ export class PlannerService {
   }
 
   getLocationName(): Observable<string> {
-    console.log('getLocationName', this.state.value.locationName);
     return new Observable(subscriber => {
       subscriber.next(this.state.value.locationName);
       this.state.subscribe(state => subscriber.next(state.locationName));
@@ -64,7 +61,6 @@ export class PlannerService {
 
   // Return Time
   setReturnTime(time: string) {
-    console.log('setReturnTime', time);
     this.state.next({
       ...this.state.value,
       returnTime: time
@@ -72,7 +68,6 @@ export class PlannerService {
   }
 
   getReturnTime(): Observable<string> {
-    console.log('getReturnTime', this.state.value.returnTime);
     return new Observable(subscriber => {
       subscriber.next(this.state.value.returnTime);
       this.state.subscribe(state => subscriber.next(state.returnTime));
@@ -81,7 +76,6 @@ export class PlannerService {
 
   // Activity
   setSelectedActivity(activity: PlanResponse) {
-    console.log('setSelectedActivity', activity);
     this.state.next({
       ...this.state.value,
       selectedActivity: activity
@@ -89,7 +83,6 @@ export class PlannerService {
   }
 
   getSelectedActivity(): Observable<PlanResponse | null> {
-    console.log('getSelectedActivity', this.state.value.selectedActivity);
     return new Observable(subscriber => {
       subscriber.next(this.state.value.selectedActivity);
       this.state.subscribe(state => subscriber.next(state.selectedActivity));

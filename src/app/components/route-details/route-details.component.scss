@@ -82,6 +82,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1.5rem;
+    margin-bottom: 2rem;
   }
 
   .card-header {
@@ -228,6 +229,18 @@
     border-top: 1px solid #E5E7EB;
     font-weight: 500;
     color: #000;
+  }
+
+  .card-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding: 1rem;
+    border-top: 1px solid #E5E7EB;
+
+    button {
+      min-width: 120px;
+    }
   }
 }
 

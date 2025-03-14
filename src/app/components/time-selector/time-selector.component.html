@@ -82,4 +82,15 @@
       <p>{{getReturnTimeDisplay()}}</p>
     </div>
   </div>
+
+  <div class="card-actions">
+    <button mat-flat-button color="primary" routerLink="/">
+      <mat-icon>arrow_back</mat-icon>
+      Zurück
+    </button>
+    <button mat-flat-button color="primary" routerLink="/activities" [disabled]="!hasReturnTime">
+      Weiter
+      <mat-icon>arrow_forward</mat-icon>
+    </button>
+  </div>
 </div>

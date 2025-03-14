@@ -15,19 +15,7 @@
 
   <div class="step-label">{{getCurrentStepLabel()}}</div>
 
-  <router-outlet></router-outlet>
-
-  <button *ngIf="!isLastStep()"
-          mat-raised-button
-          color="primary"
-          class="mt-6 bg-purple-600 text-white px-8 py-2 rounded-lg"
-          [disabled]="loading"
-          (click)="handleNextStep()">
-    <mat-progress-spinner *ngIf="loading" 
-                         mode="indeterminate"
-                         diameter="20"
-                         class="mr-2">
-    </mat-progress-spinner>
-    Weiter
-  </button>
+  <div class="app-container">
+    <router-outlet></router-outlet>
+  </div>
 </div>

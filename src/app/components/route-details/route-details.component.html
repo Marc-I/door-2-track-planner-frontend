@@ -56,4 +56,15 @@
       </mat-card-content>
     </mat-card>
   </div>
+
+  <div class="card-actions">
+    <button mat-flat-button color="primary" routerLink="/activities">
+      <mat-icon>arrow_back</mat-icon>
+      Zurück
+    </button>
+    <button mat-flat-button color="primary" (click)="resetPlanner()">
+      Neu planen
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
 </div> 

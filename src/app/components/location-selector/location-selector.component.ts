@@ -1,16 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { PlannerService } from '../../services/planner.service';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CommonModule, DecimalPipe } from '@angular/common';
-import { MatRadioModule } from '@angular/material/radio';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatCardModule } from '@angular/material/card';
+import { MatRadioModule } from '@angular/material/radio';
+import { RouterModule, Router } from '@angular/router';
+import { DecimalPipe } from '@angular/common';
+import { PlannerService } from '../../services/planner.service';
 
 @Component({
   selector: 'app-location-selector',
+  templateUrl: './location-selector.component.html',
+  styleUrls: ['./location-selector.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -20,19 +24,24 @@ import { MatCardModule } from '@angular/material/card';
     MatFormFieldModule,
     MatIconModule,
     MatCardModule,
+    MatButtonModule,
+    RouterModule,
     DecimalPipe
-  ],
-  templateUrl: './location-selector.component.html',
-  styleUrl: './location-selector.component.scss'
+  ]
 })
-export class LocationSelectorComponent implements OnInit {
+export class LocationSelectorComponent {
   locationType: 'current' | 'custom' = 'current';
   locationName: string = '';
+  hasLocation = false;
 
   constructor(
     private plannerService: PlannerService,
     private router: Router
-  ) {}
+  ) {
+    this.plannerService.getLocation().subscribe(location => {
+      this.hasLocation = !!location;
+    });
+  }
 
   ngOnInit() {
     this.plannerService.getLocationName().subscribe(name => {
