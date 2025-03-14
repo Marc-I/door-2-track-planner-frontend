@@ -1,43 +1,86 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Activity } from '../../models/activity.interface';
 import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatChipsModule, MatChipListbox } from '@angular/material/chips';
+import { MatChipsModule } from '@angular/material/chips';
+import { Router } from '@angular/router';
+import { ApiService } from '../../services/api.service';
+import { PlannerService } from '../../services/planner.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { PlanResponse } from '../../models/plan-response.interface';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-activity-list',
+  templateUrl: './activity-list.component.html',
+  styleUrls: ['./activity-list.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
     MatCardModule,
-    MatButtonModule,
     MatIconModule,
     MatChipsModule,
-    MatChipListbox
-  ],
-  templateUrl: './activity-list.component.html',
-  styleUrl: './activity-list.component.scss'
+    MatProgressSpinnerModule
+  ]
 })
-export class ActivityListComponent {
-  @Input() activities: Activity[] = [];
-  @Output() selectActivity = new EventEmitter<Activity>();
+export class ActivityListComponent implements OnInit {
+  activities: PlanResponse[] = [];
+  loading = false;
+  error: string | null = null;
 
-  formatDuration(minutes: number): string {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
+  constructor(
+    private apiService: ApiService,
+    private plannerService: PlannerService,
+    private router: Router
+  ) {}
 
-    if (hours === 0) {
-      return `${mins} Minuten`;
-    } else if (mins === 0) {
-      return `${hours} Stunde${hours > 1 ? 'n' : ''}`;
-    } else {
-      return `${hours} Stunde${hours > 1 ? 'n' : ''} ${mins} Minuten`;
+  ngOnInit() {
+    this.loadActivities();
+  }
+
+  async loadActivities() {
+    this.loading = true;
+    this.error = null;
+
+    try {
+      console.log('Starting loadActivities...');
+      
+      const location = await firstValueFrom(this.plannerService.getLocationName());
+      console.log('Location:', location);
+      
+      const returnTime = await firstValueFrom(this.plannerService.getReturnTime());
+      console.log('Return time:', returnTime);
+
+      if (!location || !returnTime) {
+        this.error = 'Bitte wähle zuerst einen Standort und eine Rückkehrzeit.';
+        console.log('Missing location or return time');
+        this.loading = false;
+        return;
+      }
+
+      console.log('Calling API with:', { location, returnTime });
+      const response = await firstValueFrom(this.apiService.getPlan(location, returnTime));
+      console.log('API Response:', response);
+      
+      this.activities = response || [];
+      console.log('Activities set:', this.activities);
+    } catch (err) {
+      console.error('Detailed error:', err);
+      this.error = 'Fehler beim Laden der Aktivitäten. Bitte versuche es später erneut.';
+    } finally {
+      this.loading = false;
     }
   }
 
-  onSelect(activity: Activity): void {
-    this.selectActivity.emit(activity);
+  onSelect(activity: PlanResponse) {
+    this.plannerService.setSelectedActivity(activity);
+    this.router.navigate(['/route']);
+  }
+
+  getFormattedTime(time: string): string {
+    return new Date(time).toLocaleTimeString('de-DE', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   }
 }

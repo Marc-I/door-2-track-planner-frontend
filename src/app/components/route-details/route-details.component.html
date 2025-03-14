@@ -11,26 +11,13 @@
         </div>
         
         <div class="activity-info">
-          <h4>{{activity?.title}}</h4>
-          <p>{{activity?.description}}</p>
+          <h4>{{activity?.track_name}}</h4>
           
           <div class="activity-stats">
             <div class="stat">
               <mat-icon>schedule</mat-icon>
-              <span>{{activity?.duration}} Min.</span>
+              <span>{{activity?.duration_at_track}} Min.</span>
             </div>
-            <div class="stat">
-              <mat-icon>trending_up</mat-icon>
-              <span>{{activity?.elevation}}m</span>
-            </div>
-            <div class="stat">
-              <mat-icon>straighten</mat-icon>
-              <span>{{activity?.length}}km</span>
-            </div>
-          </div>
-
-          <div class="difficulty-chip" [class]="activity?.difficulty?.toLowerCase()">
-            {{activity?.difficulty}}
           </div>
         </div>
       </mat-card-content>

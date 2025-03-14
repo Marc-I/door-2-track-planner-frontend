@@ -12,12 +12,20 @@ export class ApiService {
 
     constructor(private http: HttpClient) {}
 
-    getPlan(location: string, returnTime: string): Observable<PlanResponse> {
+    getPlan(location: string, returnTime: string): Observable<PlanResponse[]> {
+        // Erstelle ein Datum für heute mit der angegebenen Uhrzeit
+        const [hours, minutes] = returnTime.split(':');
+        const date = new Date();
+        date.setHours(parseInt(hours, 10));
+        date.setMinutes(parseInt(minutes, 10));
+        date.setSeconds(0);
+        date.setMilliseconds(0);
+
         const request: PlanRequest = {
         user_location: location,
-        return_time: new Date(returnTime).toISOString()
+        return_time: date.toISOString()
         };
 
-        return this.http.post<PlanResponse>(`${this.apiUrl}/plan`, request);
+        return this.http.post<PlanResponse[]>(`${this.apiUrl}/plan`, request);
     }
 }

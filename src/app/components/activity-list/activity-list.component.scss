@@ -3,12 +3,30 @@
     font-size: 2rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
+    color: #000;
   }
 
   .description {
     font-size: 1.125rem;
     color: #6B7280;
     margin-bottom: 2rem;
+  }
+
+  .loading, .error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+    color: #6B7280;
+    gap: 1rem;
+
+    mat-icon {
+      font-size: 2rem;
+      width: 2rem;
+      height: 2rem;
+    }
   }
 
   .activities {
@@ -25,9 +43,8 @@
     overflow: hidden;
 
     &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-                  0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     }
 
     .mat-mdc-card-image {
@@ -41,7 +58,7 @@
       h3 {
         font-size: 1.25rem;
         font-weight: 600;
-        margin-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
         color: #000;
       }
 
@@ -53,24 +70,56 @@
       }
 
       .activity-details {
-        display: flex;
-        gap: 1.5rem;
-        margin-bottom: 1rem;
+        .timeline {
+          margin-bottom: 1.5rem;
 
-        .detail {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          color: #6B7280;
+          .time-point {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
 
-          mat-icon {
-            font-size: 1.25rem;
-            width: 1.25rem;
-            height: 1.25rem;
+            &:last-child {
+              margin-bottom: 0;
+            }
+
+            mat-icon {
+              color: #4B5563;
+            }
+
+            .time-info {
+              .label {
+                display: block;
+                font-size: 0.875rem;
+                color: #6B7280;
+                margin-bottom: 0.25rem;
+              }
+
+              .time {
+                font-weight: 500;
+                color: #000;
+              }
+            }
           }
+        }
 
-          span {
-            font-size: 0.875rem;
+        .activity-stats {
+          display: flex;
+          gap: 1.5rem;
+          padding-top: 1rem;
+          border-top: 1px solid #E5E7EB;
+
+          .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #4B5563;
+
+            mat-icon {
+              font-size: 1.25rem;
+              width: 1.25rem;
+              height: 1.25rem;
+            }
           }
         }
       }
@@ -117,5 +166,25 @@
       background-color: #FEE2E2;
       color: #991B1B;
     }
+  }
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #FEE2E2;
+  border-radius: 0.5rem;
+  color: #991B1B;
+
+  mat-icon {
+    font-size: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  p {
+    margin: 0;
   }
 }

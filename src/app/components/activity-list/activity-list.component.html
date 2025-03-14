@@ -2,32 +2,64 @@
   <h2>Verfügbare Aktivitäten</h2>
   <p class="description">Wähle eine passende Aktivität aus</p>
 
-  <div class="activities">
+  <div *ngIf="loading" class="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Aktivitäten werden geladen...</p>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    <mat-icon>error_outline</mat-icon>
+    <p>{{error}}</p>
+  </div>
+
+  <div *ngIf="!loading && !error" class="activities">
     <mat-card *ngFor="let activity of activities" 
               class="activity-card"
               (click)="onSelect(activity)">
-      <img mat-card-image [src]="activity.image" [alt]="activity.title">
       <mat-card-content>
-        <h3>{{activity.title}}</h3>
-        <p class="activity-description">{{activity.description}}</p>
+        <h3>{{activity.track_name}}</h3>
         
         <div class="activity-details">
-          <div class="detail">
-            <mat-icon>schedule</mat-icon>
-            <span>{{activity.duration}} Min.</span>
-          </div>
-          <div class="detail">
-            <mat-icon>trending_up</mat-icon>
-            <span>{{activity.elevation}}m</span>
-          </div>
-          <div class="detail">
-            <mat-icon>straighten</mat-icon>
-            <span>{{activity.length}}km</span>
-          </div>
-        </div>
+          <div class="timeline">
+            <div class="time-point">
+              <mat-icon>home</mat-icon>
+              <div class="time-info">
+                <span class="label">Abfahrt</span>
+                <span class="time">{{getFormattedTime(activity.departure_time_home)}}</span>
+              </div>
+            </div>
 
-        <div class="difficulty-chip" [class]="activity.difficulty.toLowerCase()">
-          {{activity.difficulty}}
+            <div class="time-point">
+              <mat-icon>hiking</mat-icon>
+              <div class="time-info">
+                <span class="label">Start Aktivität</span>
+                <span class="time">{{getFormattedTime(activity.arrival_time_track_start)}}</span>
+              </div>
+            </div>
+
+            <div class="time-point">
+              <mat-icon>flag</mat-icon>
+              <div class="time-info">
+                <span class="label">Ende Aktivität</span>
+                <span class="time">{{getFormattedTime(activity.departure_time_track_end)}}</span>
+              </div>
+            </div>
+
+            <div class="time-point">
+              <mat-icon>home</mat-icon>
+              <div class="time-info">
+                <span class="label">Rückkehr</span>
+                <span class="time">{{getFormattedTime(activity.arrival_time_home)}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="activity-stats">
+            <div class="stat">
+              <mat-icon>schedule</mat-icon>
+              <span>{{activity.duration_at_track}} Min. vor Ort</span>
+            </div>
+          </div>
         </div>
       </mat-card-content>
     </mat-card>

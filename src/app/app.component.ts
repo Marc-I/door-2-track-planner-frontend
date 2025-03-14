@@ -4,7 +4,6 @@ import { Router, ActivatedRoute, RouterOutlet, RouterLink } from '@angular/route
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { routes } from './app.routes';
-import { ApiService } from './services/api.service';
 
 interface RouteData {
   path: string;
@@ -33,13 +32,8 @@ export class AppComponent {
   
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
-    private apiService: ApiService
-  ) {
-    this.apiService.getPlan('Zürich HB', '2025-03-15T12:00:00Z').subscribe(plan => {
-      console.log(plan);
-    });
-  }
+    private route: ActivatedRoute
+  ) {  }
 
   isRouteActive(path: string): boolean {
     return this.router.url.includes(path);
