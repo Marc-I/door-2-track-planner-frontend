@@ -1,4 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@use '@angular/material' as mat;
+@use './styles/theme';
+
+// Globale Styles
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+// Basis Styles für Material Design
+.mat-mdc-button-base {
+  margin: 8px 8px 8px 0;
+}
+
+// Die Theme-Farben werden automatisch auf Material Components angewendet
+// Zum Beispiel: mat-button mit color="primary" oder color="accent"
