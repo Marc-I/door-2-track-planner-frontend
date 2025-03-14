@@ -1,0 +1,35 @@
+<div class="activity-list">
+  <h2>Verfügbare Aktivitäten</h2>
+  <p class="description">Wähle eine passende Aktivität aus</p>
+
+  <div class="activities">
+    <mat-card *ngFor="let activity of activities" 
+              class="activity-card"
+              (click)="onSelect(activity)">
+      <img mat-card-image [src]="activity.image" [alt]="activity.title">
+      <mat-card-content>
+        <h3>{{activity.title}}</h3>
+        <p class="activity-description">{{activity.description}}</p>
+        
+        <div class="activity-details">
+          <div class="detail">
+            <mat-icon>schedule</mat-icon>
+            <span>{{activity.duration}} Min.</span>
+          </div>
+          <div class="detail">
+            <mat-icon>trending_up</mat-icon>
+            <span>{{activity.elevation}}m</span>
+          </div>
+          <div class="detail">
+            <mat-icon>straighten</mat-icon>
+            <span>{{activity.length}}km</span>
+          </div>
+        </div>
+
+        <div class="difficulty-chip" [class]="activity.difficulty.toLowerCase()">
+          {{activity.difficulty}}
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

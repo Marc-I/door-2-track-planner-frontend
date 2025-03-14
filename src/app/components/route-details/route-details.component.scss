@@ -1,0 +1,237 @@
+:host {
+  display: block;
+}
+
+.space-y-6 {
+  > * + * {
+    margin-top: 1.5rem;
+  }
+}
+
+.text-primary {
+  color: var(--primary-color);
+}
+
+.text-muted-foreground {
+  color: var(--muted-foreground);
+}
+
+.bg-muted {
+  background-color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  &.grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.gap-x-4 {
+  column-gap: 1rem;
+}
+
+.gap-y-1 {
+  row-gap: 0.25rem;
+}
+
+.flex-1 {
+  flex: 1 1 0%;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.route-details {
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .description {
+    font-size: 1.125rem;
+    color: #6B7280;
+    margin-bottom: 2rem;
+  }
+
+  .details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+::ng-deep {
+  .activity-card, .route-card {
+    height: 100%;
+    border: none;
+    border-radius: 0.75rem;
+    overflow: hidden;
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+
+      mat-icon {
+        font-size: 1.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #000;
+      }
+    }
+  }
+
+  .activity-info {
+    h4 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #000;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #6B7280;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .activity-stats {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+
+      .stat {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #6B7280;
+
+        mat-icon {
+          font-size: 1.25rem;
+          width: 1.25rem;
+          height: 1.25rem;
+        }
+
+        span {
+          font-size: 0.875rem;
+        }
+      }
+    }
+
+    .difficulty-chip {
+      display: inline-flex;
+      padding: 0.25rem 0.75rem;
+      border-radius: 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+
+      &.leicht {
+        background-color: #DEF7EC;
+        color: #03543F;
+      }
+
+      &.mittel {
+        background-color: #FEF3C7;
+        color: #92400E;
+      }
+
+      &.schwer {
+        background-color: #FEE2E2;
+        color: #991B1B;
+      }
+    }
+  }
+
+  .route-segments {
+    .segment {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1rem;
+
+      &:last-child {
+        margin-bottom: 1.5rem;
+      }
+
+      .segment-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.5rem;
+        flex-shrink: 0;
+
+        &.walk {
+          background-color: #F3F4F6;
+          color: #374151;
+        }
+
+        &.bus {
+          background-color: #DBEAFE;
+          color: #1E40AF;
+        }
+
+        &.subway {
+          background-color: #FCE7F3;
+          color: #831843;
+        }
+
+        mat-icon {
+          font-size: 1.25rem;
+        }
+      }
+
+      .segment-details {
+        .segment-type {
+          font-weight: 500;
+          margin-bottom: 0.25rem;
+        }
+
+        .segment-time {
+          font-size: 0.875rem;
+          color: #6B7280;
+        }
+      }
+    }
+  }
+
+  .total-time {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid #E5E7EB;
+    font-weight: 500;
+  }
+} 

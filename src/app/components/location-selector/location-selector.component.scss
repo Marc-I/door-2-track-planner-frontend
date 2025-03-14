@@ -1,0 +1,94 @@
+.location-selector {
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .description {
+    font-size: 1.125rem;
+    color: #6B7280;
+    margin-bottom: 2rem;
+  }
+
+  .options {
+    margin-bottom: 2rem;
+
+    .option {
+      margin-bottom: 1.5rem;
+
+      .option-content {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 1rem;
+
+        .navigation-icon {
+          transform: rotate(45deg);
+        }
+
+        mat-icon {
+          font-size: 1.5rem;
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+      }
+    }
+  }
+
+  .startpoint {
+    background: #F9FAFB;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+
+    mat-icon {
+      color: #000;
+      font-size: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    .startpoint-content {
+      h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+      }
+
+      p {
+        font-size: 1rem;
+        color: #000;
+      }
+    }
+  }
+
+  .weiter-button {
+    background: #9333EA;
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+}
+
+::ng-deep {
+  .mat-mdc-radio-button {
+    .mdc-radio {
+      .mdc-radio__background {
+        border-color: #000;
+      }
+    }
+    
+    .mdc-radio__inner-circle {
+      background-color: #000;
+    }
+
+    .mat-mdc-radio-touch-target {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,72 @@
+<div class="route-details">
+  <h2>Deine Route</h2>
+  <p class="description">Übersicht deiner geplanten Aktivität und Route</p>
+
+  <div class="details-grid">
+    <mat-card class="activity-card">
+      <mat-card-content>
+        <div class="card-header">
+          <mat-icon>hiking</mat-icon>
+          <h3>Aktivität</h3>
+        </div>
+        
+        <div class="activity-info">
+          <h4>{{activity?.title}}</h4>
+          <p>{{activity?.description}}</p>
+          
+          <div class="activity-stats">
+            <div class="stat">
+              <mat-icon>schedule</mat-icon>
+              <span>{{activity?.duration}} Min.</span>
+            </div>
+            <div class="stat">
+              <mat-icon>trending_up</mat-icon>
+              <span>{{activity?.elevation}}m</span>
+            </div>
+            <div class="stat">
+              <mat-icon>straighten</mat-icon>
+              <span>{{activity?.length}}km</span>
+            </div>
+          </div>
+
+          <div class="difficulty-chip" [class]="activity?.difficulty?.toLowerCase()">
+            {{activity?.difficulty}}
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="route-card">
+      <mat-card-content>
+        <div class="card-header">
+          <mat-icon>route</mat-icon>
+          <h3>Route</h3>
+        </div>
+
+        <div class="route-segments">
+          <div *ngFor="let segment of routeToActivity" class="segment">
+            <div class="segment-icon" [class]="segment.type">
+              <mat-icon>{{
+                segment.type === 'walk' ? 'directions_walk' :
+                segment.type === 'bus' ? 'directions_bus' : 'train'
+              }}</mat-icon>
+            </div>
+            <div class="segment-details">
+              <div class="segment-type">
+                {{segment.type === 'walk' ? 'Zu Fuß' :
+                  segment.type === 'bus' ? 'Bus ' + segment.line :
+                  'U-Bahn ' + segment.line}}
+              </div>
+              <div class="segment-time">{{segment.duration}} Min.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="total-time">
+          <span>Gesamtzeit:</span>
+          <span>{{getTotalDuration()}} Min.</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div> 
