@@ -3,53 +3,83 @@
   <p class="description">Wir planen deine Aktivitäten so, dass du rechtzeitig zurück bist</p>
 
   <div class="options">
-    <mat-radio-group [(ngModel)]="timeType" 
-                     (ngModelChange)="handleTimeTypeChange($event)">
-      <div class="option">
-        <mat-radio-button value="today">
-          <div class="option-content">
-            <mat-icon>schedule</mat-icon>
-            Heute zurück
+    <div class="option">
+      <mat-radio-group [(ngModel)]="returnType" 
+                       (ngModelChange)="handleReturnTypeChange($event)">
+        <div class="option-row">
+          <mat-radio-button value="today">
+            <div class="option-content">
+              <mat-icon>schedule</mat-icon>
+              <span>Heute zurück</span>
+            </div>
+          </mat-radio-button>
+
+          <div *ngIf="returnType === 'today'" class="time-picker">
+            <mat-form-field appearance="outline">
+              <mat-select [(ngModel)]="hours" (selectionChange)="handleTimeChange()">
+                <mat-option *ngFor="let hour of hoursOptions" [value]="hour">
+                  {{hour}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <span class="time-separator">:</span>
+
+            <mat-form-field appearance="outline">
+              <mat-select [(ngModel)]="minutes" (selectionChange)="handleTimeChange()">
+                <mat-option *ngFor="let minute of minutesOptions" [value]="minute">
+                  {{minute}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
-        </mat-radio-button>
-      </div>
+        </div>
 
-      <div class="option">
-        <mat-radio-button value="specific">
-          <div class="option-content">
-            <mat-icon>event</mat-icon>
-            Spezifische Zeit
+        <div class="option-row">
+          <mat-radio-button value="other">
+            <div class="option-content">
+              <mat-icon>event</mat-icon>
+              <span>Anderes Datum</span>
+            </div>
+          </mat-radio-button>
+
+          <div *ngIf="returnType === 'other'" class="date-time-picker">
+            <mat-form-field appearance="outline" class="date-field">
+              <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" (dateChange)="handleDateChange()">
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <div class="time-picker">
+              <mat-form-field appearance="outline">
+                <mat-select [(ngModel)]="hours" (selectionChange)="handleTimeChange()">
+                  <mat-option *ngFor="let hour of hoursOptions" [value]="hour">
+                    {{hour}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <span class="time-separator">:</span>
+
+              <mat-form-field appearance="outline">
+                <mat-select [(ngModel)]="minutes" (selectionChange)="handleTimeChange()">
+                  <mat-option *ngFor="let minute of minutesOptions" [value]="minute">
+                    {{minute}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
           </div>
-        </mat-radio-button>
-      </div>
-    </mat-radio-group>
-  </div>
-
-  <div *ngIf="timeType === 'specific'" class="time-picker">
-    <mat-form-field appearance="outline">
-      <mat-select [(ngModel)]="hours" (selectionChange)="handleHoursChange($event.value)">
-        <mat-option *ngFor="let hour of hoursOptions" [value]="hour">
-          {{hour}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <span class="time-separator">:</span>
-
-    <mat-form-field appearance="outline">
-      <mat-select [(ngModel)]="minutes" (selectionChange)="handleMinutesChange($event.value)">
-        <mat-option *ngFor="let minute of minutesOptions" [value]="minute">
-          {{minute}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+        </div>
+      </mat-radio-group>
+    </div>
   </div>
 
   <div class="return-time">
     <mat-icon>schedule</mat-icon>
     <div class="return-time-content">
       <h3>Deine Rückkehrzeit</h3>
-      <p>{{returnTime ? 'Heute um ' + returnTime + ' Uhr' : 'Nicht festgelegt'}}</p>
+      <p>{{getReturnTimeDisplay()}}</p>
     </div>
   </div>
 </div>

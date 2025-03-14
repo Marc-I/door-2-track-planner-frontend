@@ -3,6 +3,7 @@
     font-size: 2rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
+    color: #000;
   }
 
   .description {
@@ -14,20 +15,31 @@
   .options {
     margin-bottom: 2rem;
 
-    .option {
+    .option-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       margin-bottom: 1.5rem;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
 
-      .option-content {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        font-size: 1rem;
-        color: #000;
+      &:hover {
+        background-color: #F9FAFB;
+      }
 
-        mat-icon {
-          font-size: 1.5rem;
-          width: 1.5rem;
-          height: 1.5rem;
+      .mat-mdc-radio-button {
+        .option-content {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          font-size: 1rem;
+          color: #000;
+
+          mat-icon {
+            font-size: 1.5rem;
+            width: 1.5rem;
+            height: 1.5rem;
+          }
         }
       }
     }
@@ -37,17 +49,26 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-bottom: 2rem;
 
     mat-form-field {
-      width: 5rem;
+      width: 4rem;
     }
 
     .time-separator {
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       font-weight: 500;
       color: #000;
-      margin: 0 0.5rem;
+      margin: 0 0.25rem;
+    }
+  }
+
+  .date-time-picker {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .date-field {
+      width: 8rem;
     }
   }
 
@@ -71,6 +92,7 @@
         font-size: 1rem;
         font-weight: 600;
         margin-bottom: 0.25rem;
+        color: #000;
       }
 
       p {
@@ -78,20 +100,6 @@
         color: #000;
       }
     }
-
-    .mdc-notched-outline {
-      border: 1px solid;
-      border-radius: 4px; border-color: #000;
-    }
-  }
-
-  .weiter-button {
-    background: #9333EA;
-    color: white;
-    padding: 0.75rem 2rem;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    font-weight: 500;
   }
 }
 
@@ -110,16 +118,45 @@
 
   .mat-mdc-form-field {
     .mat-mdc-text-field-wrapper {
-      padding: 0;
-      background: white;
+      background-color: white;
+      border: 1px solid #E5E7EB;
+      padding: 0 !important;
     }
 
     .mat-mdc-form-field-flex {
       padding: 0 0.75rem;
+      min-height: 40px;
     }
 
-    .mat-mdc-select-value {
-      font-size: 1rem;
+    .mat-mdc-select-value,
+    .mat-mdc-select-arrow,
+    input.mat-mdc-input-element {
+      color: #000;
     }
+
+    .mat-mdc-form-field-icon-suffix {
+      color: #000;
+    }
+
+    .mdc-line-ripple {
+      display: none;
+    }
+  }
+
+  .mat-calendar {
+    .mat-calendar-body-selected {
+      background-color: #000;
+      color: white;
+    }
+
+    .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+      border-color: #000;
+    }
+  }
+}
+
+::ng-deep {
+  .mat-datepicker-toggle, .mat-mdc-form-field {
+    color: #000;
   }
 }
