@@ -7,8 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
-import { RouterModule, Router } from '@angular/router';
-import { DecimalPipe } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { PlannerService } from '../../services/planner.service';
 
 @Component({
@@ -25,42 +24,54 @@ import { PlannerService } from '../../services/planner.service';
     MatIconModule,
     MatCardModule,
     MatButtonModule,
-    RouterModule,
-    DecimalPipe
+    RouterModule
   ]
 })
 export class LocationSelectorComponent {
-  locationType: 'current' | 'custom' = 'current';
-  locationName: string = '';
+  locationType: 'current' | 'other' = 'current';
   hasLocation = false;
+  manualLocation = '';
 
-  constructor(
-    private plannerService: PlannerService,
-    private router: Router
-  ) {
+  constructor(private plannerService: PlannerService) {
     this.plannerService.getLocation().subscribe(location => {
       this.hasLocation = !!location;
     });
   }
 
-  ngOnInit() {
-    this.plannerService.getLocationName().subscribe(name => {
-      this.locationName = name;
-    });
-  }
-
-  handleLocationTypeChange(type: 'current' | 'custom') {
-    if (type === 'current') {
-      // Simuliere Geolocation
-      const location = { lat: 47.2692, lng: 11.4041 };
-      this.locationName = 'Innsbruck';
-      this.plannerService.setLocation(location, this.locationName);
+  onLocationTypeChange() {
+    if (this.locationType === 'current') {
+      this.getCurrentLocation();
+    } else {
+      this.plannerService.setLocation({ lat: 47.2692124, lng: 11.4041024 }, '');
     }
   }
 
-  async handleNextStep() {
-    if (this.plannerService.canNavigateToTime()) {
-      await this.router.navigate(['/time']);
+  onManualLocationSubmit() {
+    if (this.manualLocation) {
+      // Verwende Innsbruck als Beispiel-Koordinaten
+      this.plannerService.setLocation(
+        { lat: 47.2692124, lng: 11.4041024 },
+        this.manualLocation
+      );
+    }
+  }
+
+  getCurrentLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const location = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          // Verwende die Koordinaten als Name
+          const name = `${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}`;
+          this.plannerService.setLocation(location, name);
+        },
+        (error) => {
+          console.error('Error getting location:', error);
+        }
+      );
     }
   }
 }

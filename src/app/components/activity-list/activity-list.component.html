@@ -17,7 +17,7 @@
               class="activity-card"
               (click)="onSelect(activity)">
       <mat-card-content>
-        <h3>{{activity.track_name}}</h3>
+        <h3>{{activity.track_name.de}}</h3>
         
         <div class="activity-details">
           <div class="timeline">
@@ -57,7 +57,7 @@
           <div class="activity-stats">
             <div class="stat">
               <mat-icon>schedule</mat-icon>
-              <span>{{activity.duration_at_track}} Min. vor Ort</span>
+              <span>{{activity.duration_at_track | number:'1.0-0' }} Min. vor Ort</span>
             </div>
           </div>
         </div>

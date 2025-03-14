@@ -1,40 +1,32 @@
 <div class="location-selector">
-  <h2>Wo bist du gerade?</h2>
-  <p class="description">Wir benötigen deinen Standort, um passende Aktivitäten vorzuschlagen</p>
+  <h2>Wo bist du?</h2>
+  <p class="description">Wähle deinen Standort aus</p>
 
-  <div class="options">
-    <mat-radio-group [(ngModel)]="locationType" 
-                     (ngModelChange)="handleLocationTypeChange($event)">
-      <div class="option">
-        <mat-radio-button value="current">
-          <div class="option-content">
-            <mat-icon class="navigation-icon">navigation</mat-icon>
-            Aktuellen Standort verwenden
-          </div>
-        </mat-radio-button>
+  <mat-card>
+    <mat-card-content>
+      <mat-radio-group [(ngModel)]="locationType" (change)="onLocationTypeChange()">
+        <mat-radio-button value="current">Aktueller Standort</mat-radio-button>
+        <mat-radio-button value="other">Anderer Standort</mat-radio-button>
+      </mat-radio-group>
+
+      <div *ngIf="locationType === 'other'" class="location-search">
+        <mat-form-field appearance="outline">
+          <mat-label>Standort eingeben</mat-label>
+          <input matInput
+                 [(ngModel)]="manualLocation"
+                 placeholder="z.B. Zürich"
+                 (keyup.enter)="onManualLocationSubmit()">
+          <mat-icon matSuffix>location_on</mat-icon>
+        </mat-form-field>
       </div>
-
-      <div class="option">
-        <mat-radio-button value="custom">
-          <div class="option-content">
-            <mat-icon>place</mat-icon>
-            Anderen Standort eingeben
-          </div>
-        </mat-radio-button>
-      </div>
-    </mat-radio-group>
-  </div>
-
-  <div class="startpoint">
-    <mat-icon>place</mat-icon>
-    <div class="startpoint-content">
-      <h3>Dein Startpunkt</h3>
-      <p>{{locationName || "Nicht festgelegt"}}</p>
-    </div>
-  </div>
+    </mat-card-content>
+  </mat-card>
 
   <div class="card-actions">
-    <span class="back-button"></span>
+    <button mat-flat-button color="primary" routerLink="/">
+      <mat-icon>arrow_back</mat-icon>
+      Zurück
+    </button>
     <button mat-flat-button color="primary" routerLink="/time" [disabled]="!hasLocation">
       Weiter
       <mat-icon>arrow_forward</mat-icon>

@@ -54,7 +54,7 @@ export class ActivityListComponent implements OnInit {
     try {
       console.log('Starting loadActivities...');
       
-      const location = await firstValueFrom(this.plannerService.getLocationName());
+      const location = await firstValueFrom(this.plannerService.getLocation());
       console.log('Location:', location);
       
       const returnTime = await firstValueFrom(this.plannerService.getReturnTime());

@@ -37,7 +37,7 @@ export class PlannerService {
   }
 
   // Location
-  setLocation(location: { lat: number; lng: number }, name: string) {
+  setLocation(location: { lat: number; lng: number } | null, name: string) {
     this.state.next({
       ...this.state.value,
       currentLocation: location,
