@@ -1,4 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { PlannerService } from '../../services/planner.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { MatRadioModule } from '@angular/material/radio';
@@ -23,31 +25,33 @@ import { MatCardModule } from '@angular/material/card';
   templateUrl: './location-selector.component.html',
   styleUrl: './location-selector.component.scss'
 })
-export class LocationSelectorComponent {
-  @Input() currentLocation: { lat: number; lng: number } | null = null;
-  @Input() locationName: string = '';
-  @Output() locationNameChange = new EventEmitter<string>();
-
+export class LocationSelectorComponent implements OnInit {
   locationType: 'current' | 'custom' = 'current';
-  customLocation: string = '';
+  locationName: string = '';
 
-  handleLocationTypeChange(value: 'current' | 'custom'): void {
-    this.locationType = value;
-    if (value === 'current') {
-      this.setLocationName('Current Location');
-    } else {
-      this.setLocationName(this.customLocation);
+  constructor(
+    private plannerService: PlannerService,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    this.plannerService.getLocationName().subscribe(name => {
+      this.locationName = name;
+    });
+  }
+
+  handleLocationTypeChange(type: 'current' | 'custom') {
+    if (type === 'current') {
+      // Simuliere Geolocation
+      const location = { lat: 47.2692, lng: 11.4041 };
+      this.locationName = 'Innsbruck';
+      this.plannerService.setLocation(location, this.locationName);
     }
   }
 
-  handleCustomLocationChange(event: any): void {
-    this.customLocation = event.target.value;
-    if (this.locationType === 'custom') {
-      this.setLocationName(event.target.value);
+  async handleNextStep() {
+    if (this.plannerService.canNavigateToTime()) {
+      await this.router.navigate(['/time']);
     }
-  }
-
-  private setLocationName(name: string): void {
-    this.locationNameChange.emit(name);
   }
 }

@@ -1,101 +1,64 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
-import { Activity } from './models/activity.interface';
-import { MatCardModule } from '@angular/material/card';
+import { Router, ActivatedRoute, RouterOutlet, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ActivityListComponent } from './components/activity-list/activity-list.component';
-import { LocationSelectorComponent } from './components/location-selector/location-selector.component';
-import { TimeSelectorComponent } from './components/time-selector/time-selector.component';
-import { RouteDetailsComponent } from './components/route-details/route-details.component';
+import { routes } from './app.routes';
+
+interface RouteData {
+  path: string;
+  data?: {
+    step: number;
+    label: string;
+  };
+}
 
 @Component({
   selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
     RouterOutlet,
-    MatCardModule,
+    RouterLink,
     MatButtonModule,
-    MatProgressSpinnerModule,
-    ActivityListComponent,
-    LocationSelectorComponent,
-    TimeSelectorComponent,
-    RouteDetailsComponent
-  ],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+    MatProgressSpinnerModule
+  ]
 })
-export class AppComponent implements OnInit {
-  title = 'door2track';
-  step = 1;
+export class AppComponent {
+  routes = routes.filter(route => route.path !== '') as RouteData[];
   loading = false;
-  currentLocation: { lat: number; lng: number } | null = null;
-  locationName = '';
-  returnTime = '';
-  selectedActivity: Activity | null = null;
-  suggestedActivities: Activity[] = [];
+  
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
-  ngOnInit() {
-    // Get current location when component mounts
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          this.currentLocation = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
-          this.locationName = 'Current Location';
-        },
-        (error) => {
-          console.error('Error getting location:', error);
-        }
-      );
-    }
+  isRouteActive(path: string): boolean {
+    return this.router.url.includes(path);
   }
 
-  handleNextStep() {
+  getCurrentStepLabel(): string {
+    const currentRoute = this.routes.find(route => this.isRouteActive(route.path));
+    return currentRoute?.data?.label || '';
+  }
+
+  isLastStep(): boolean {
+    const currentRoute = this.routes.find(route => this.isRouteActive(route.path));
+    return currentRoute?.data?.step === 4;
+  }
+
+  async handleNextStep() {
     this.loading = true;
+    const currentRoute = this.routes.find(route => this.isRouteActive(route.path));
+    const nextRoute = this.routes.find(route => 
+      route.data?.step === (currentRoute?.data?.step || 0) + 1
+    );
 
-    // Simulate API calls
-    setTimeout(() => {
-      if (this.step === 2) {
-        // After setting return time, fetch suggested activities
-        this.suggestedActivities = [
-          {
-            id: 1,
-            title: 'Panorama-Loipe Alpenblick',
-            description: 'Leichte Langlaufloipe mit herrlichem Bergpanorama',
-            duration: 120,
-            difficulty: 'Leicht',
-            length: 8,
-            elevation: 120,
-            startLocation: { name: 'Bergstation Alpenblick', lat: 47.3021, lng: 11.8735 },
-            endLocation: { name: 'Bergstation Alpenblick', lat: 47.3021, lng: 11.8735 },
-            image: '/placeholder.svg'
-          },
-          // ... weitere Aktivitäten ...
-        ];
-      }
-
-      this.loading = false;
-      this.step++;
-    }, 1000);
-  }
-
-  onSelectActivity(activity: Activity) {
-    this.selectedActivity = activity;
-    this.step = 4;
-  }
-
-  goBack() {
-    this.step--;
-  }
-
-  startNewPlanning() {
-    this.step = 1;
-    this.selectedActivity = null;
-    this.returnTime = '';
+    if (nextRoute) {
+      await this.router.navigate([nextRoute.path]);
+    }
+    this.loading = false;
   }
 }

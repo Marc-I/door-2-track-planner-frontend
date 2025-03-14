@@ -3,68 +3,31 @@
   <p class="subtitle">Finde passende Langlaufloipen in Bergregionen und plane deine An- und Abreise</p>
 
   <div class="steps">
-    <div class="step-item">
-      <div class="step active">1</div>
-      <div class="step-line"></div>
-    </div>
-    <div class="step-item">
-      <div class="step">2</div>
-      <div class="step-line"></div>
-    </div>
-    <div class="step-item">
-      <div class="step">3</div>
-      <div class="step-line"></div>
-    </div>
-    <div class="step-item">
-      <div class="step">4</div>
+    <div class="step-item" *ngFor="let route of routes; let last = last">
+      <div class="step" 
+           [class.active]="isRouteActive(route.path)"
+           [routerLink]="route.path">
+        {{route.data?.step}}
+      </div>
+      <div class="step-line" *ngIf="!last"></div>
     </div>
   </div>
 
-  <div class="step-label">Standort auswählen</div>
+  <div class="step-label">{{getCurrentStepLabel()}}</div>
 
-  <ng-container [ngSwitch]="step">
-    <app-location-selector 
-      *ngSwitchCase="1"
-      [currentLocation]="currentLocation"
-      [locationName]="locationName"
-      (locationNameChange)="locationName = $event">
-    </app-location-selector>
+  <router-outlet></router-outlet>
 
-    <app-time-selector
-      *ngSwitchCase="2"
-      [returnTime]="returnTime"
-      (returnTimeChange)="returnTime = $event">
-    </app-time-selector>
-
-    <app-activity-list
-      *ngSwitchCase="3"
-      [activities]="suggestedActivities"
-      (selectActivity)="onSelectActivity($event)">
-    </app-activity-list>
-
-    <app-route-details
-      *ngSwitchCase="4"
-      [currentLocation]="currentLocation"
-      [locationName]="locationName"
-      [activity]="selectedActivity"
-      [returnTime]="returnTime">
-    </app-route-details>
-  </ng-container>
-
-  <!-- Navigation Button -->
-  <button *ngIf="step < 3"
+  <button *ngIf="!isLastStep()"
           mat-raised-button
           color="primary"
           class="mt-6 bg-purple-600 text-white px-8 py-2 rounded-lg"
           [disabled]="loading"
           (click)="handleNextStep()">
     <mat-progress-spinner *ngIf="loading" 
-                        mode="indeterminate"
-                        diameter="20"
-                        class="mr-2">
+                         mode="indeterminate"
+                         diameter="20"
+                         class="mr-2">
     </mat-progress-spinner>
     Weiter
   </button>
 </div>
-
-<router-outlet></router-outlet>
